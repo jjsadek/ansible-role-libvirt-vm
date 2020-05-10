@@ -48,20 +48,15 @@
 {% for interface in interfaces %}
 {% if interface.type is defined and interface.type == 'direct' %}
     <interface type='direct'>
-      <source dev='{{ interface.source_dev }}' mode='{{ interface.source_mode | default('vepa') }}'/>
+      <source dev='{{ interface.source.dev }}' mode='{{ interface.source.mode | default('vepa') }}'/>
 {% elif interface.type is defined and interface.type == 'bridge' %}
     <interface type='bridge'>
-      <source bridge='{{ interface.bridge_name }}'/>
-      <vlan>
-        <tag id='{{ interface.bridge_vlan }}'/>
-      </vlan>
-      <virtualport type='{{ interface.bridge_type }}'/>
-      <target dev='tap{{ interface.bridge_vlan }}-{{ interface.id }}'/>
+      <source bridge='{{ interface.source.dev }}'/>
 {% elif interface.type is not defined or interface.type == 'network' %}
     <interface type='network'>
       <source network='{{ interface.network }}'/>
 {% endif %}
-      {% if interface.mac is defined %} 
+      {% if interface.mac is defined %}
       <mac address='{{ interface.mac }}'/>
       {% endif %}
       {# if the network configuration is invalid this can still appear in the xml #}
